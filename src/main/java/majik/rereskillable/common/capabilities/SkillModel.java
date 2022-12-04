@@ -1,10 +1,9 @@
 package majik.rereskillable.common.capabilities;
 
-import majik.rereskillable.Configuration;
 import majik.rereskillable.common.network.NotifyWarning;
-import majik.rereskillable.common.skills.Requirement;
-import majik.rereskillable.common.skills.RequirementType;
-import majik.rereskillable.common.skills.Skill;
+import majik.rereskillable.common.commands.skills.Requirement;
+import majik.rereskillable.common.commands.skills.RequirementType;
+import majik.rereskillable.common.commands.skills.Skill;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -44,21 +43,21 @@ public class SkillModel implements INBTSerializable<CompoundTag>
     
     public boolean canUseItem(Player player, ItemStack item)
     {
-        return canUse(player, item.getItem().getRegistryName());
+        return canUse(player, item.getItem().asItem().builtInRegistryHolder().key().location());
     }
     
     // Can Player Use Block
     
     public boolean canUseBlock(Player player, Block block)
     {
-        return canUse(player, block.getRegistryName());
+        return canUse(player, block.builtInRegistryHolder().key().location());
     }
     
     // Can Player Use Entity
     
     public boolean canUseEntity(Player player, Entity entity)
     {
-        return canUse(player, entity.getType().getRegistryName());
+        return canUse(player, entity.getType().builtInRegistryHolder().key().location());
     }
     
     // Can Player Use
@@ -139,12 +138,12 @@ public class SkillModel implements INBTSerializable<CompoundTag>
     }
 
     public boolean canCraftItem(Player player, ItemStack stack) {
-        ResourceLocation resource = stack.getItem().getRegistryName();
+        ResourceLocation resource = stack.getItem().builtInRegistryHolder().key().location();
         return checkRequirements(player, resource, RequirementType.CRAFT);
     }
 
     public boolean canAttackEntity(Player player, Entity target) {
-        ResourceLocation resource = target.getType().getRegistryName();
+        ResourceLocation resource = target.getType().builtInRegistryHolder().key().location();
         return checkRequirements(player, resource, RequirementType.ATTACK);
     }
 }

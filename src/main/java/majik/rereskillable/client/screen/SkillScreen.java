@@ -3,11 +3,11 @@ package majik.rereskillable.client.screen;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import majik.rereskillable.client.screen.buttons.SkillButton;
-import majik.rereskillable.common.skills.Skill;
-import net.minecraft.client.Minecraft;
+import majik.rereskillable.common.commands.skills.Skill;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.network.chat.TranslatableComponent;
 
 public class SkillScreen extends Screen
 {
@@ -15,7 +15,7 @@ public class SkillScreen extends Screen
     
     public SkillScreen()
     {
-        super(new TranslatableComponent("container.skills"));
+        super(Component.translatable("container.skills").withStyle(ChatFormatting.BOLD).withStyle(ChatFormatting.BLACK));
     }
     
     // Init

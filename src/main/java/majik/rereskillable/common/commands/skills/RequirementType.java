@@ -1,4 +1,4 @@
-package majik.rereskillable.common.skills;
+package majik.rereskillable.common.commands.skills;
 
 import majik.rereskillable.Configuration;
 import net.minecraft.resources.ResourceLocation;

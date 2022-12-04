@@ -1,7 +1,7 @@
 package majik.rereskillable;
 
-import majik.rereskillable.common.skills.Requirement;
-import majik.rereskillable.common.skills.Skill;
+import majik.rereskillable.common.commands.skills.Requirement;
+import majik.rereskillable.common.commands.skills.Skill;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.ForgeConfigSpec;
 

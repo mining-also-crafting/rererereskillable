@@ -4,7 +4,6 @@ import majik.rereskillable.Configuration;
 import majik.rereskillable.common.capabilities.SkillModel;
 import majik.rereskillable.common.capabilities.SkillProvider;
 import majik.rereskillable.common.network.SyncToClient;
-import majik.rereskillable.common.skills.Skill;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.animal.Sheep;
@@ -13,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -31,9 +29,9 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack item = event.getItemStack();
-        Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+        Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
         SkillModel model = SkillModel.get(player);
         
         if (!player.isCreative() && (!model.canUseItem(player, item) || !model.canUseBlock(player, block)))
@@ -47,9 +45,9 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack item = event.getItemStack();
-        Block block = event.getWorld().getBlockState(event.getPos()).getBlock();
+        Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
         SkillModel model = SkillModel.get(player);
         
         if (!player.isCreative() && (!model.canUseItem(player, item) || !model.canUseBlock(player, block)))
@@ -63,7 +61,7 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRightClickItem(PlayerInteractEvent.RightClickItem event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         ItemStack item = event.getItemStack();
         
         if (!player.isCreative() && !SkillModel.get(player).canUseItem(player, item))
@@ -77,7 +75,7 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onRightClickEntity(PlayerInteractEvent.EntityInteract event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         Entity entity = event.getTarget();
         ItemStack item = event.getItemStack();
         
@@ -95,7 +93,7 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onAttackEntity(AttackEntityEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getEntity();
         
         if (player != null)
         {
@@ -155,7 +153,6 @@ public class EventHandler
             if (Configuration.getDeathReset()){
                 SkillModel.get((Player) event.getEntity()).skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
             }
-            lastDiedPlayerSkills = SkillModel.get((Player) event.getEntity());
         }
     }
     
@@ -173,30 +170,31 @@ public class EventHandler
         }
     }
 
-    private SkillModel lastDiedPlayerSkills = null;
     
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event)
     {
-        SkillModel.get(event.getPlayer()).skillLevels = lastDiedPlayerSkills.skillLevels; // SkillModel.get(event.getOriginal()).skillLevels;
+        event.getOriginal().reviveCaps();
+        SkillModel.get(event.getEntity()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
+        event.getOriginal().invalidateCaps();
     }
     
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent e)
     {
-        SyncToClient.send(e.getPlayer());
+        SyncToClient.send(e.getEntity());
     }
     
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent e)
     {
-        SyncToClient.send(e.getPlayer());
+        SyncToClient.send(e.getEntity());
     }
     
     @SubscribeEvent
     public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent e)
     {
-        if (e.getPlayer().level.isClientSide()) return;
-        SyncToClient.send(e.getPlayer());
+        if (e.getEntity().level.isClientSide()) return;
+        SyncToClient.send(e.getEntity());
     }
 }

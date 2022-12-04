@@ -1,14 +1,14 @@
 modLoader="javafml"
-loaderVersion="[38,)"
+loaderVersion="[43,)"
 license="All rights reserved"
 
 [[mods]]
 modId="rereskillable"
 version="${file.jarVersion}"
 displayName="Rereskillable"
-displayURL="https://www.curseforge.com/minecraft/mc-mods/rereskillable"
+displayURL=""
 credits="Skillable and Reskillable"
-authors="majik, LukeGrahamLandry"
+authors="majik, LukeGrahamLandry, OrangeJewce92"
 description='''
 Rereskillable is a simplified rewrite of Reskillable for Minecraft Forge 1.16.5+.
 '''
@@ -16,20 +16,20 @@ Rereskillable is a simplified rewrite of Reskillable for Minecraft Forge 1.16.5+
 [[dependencies.rereskillable]]
     modId="forge"
     mandatory=true
-    versionRange="[38,)"
+    versionRange="[43.3.8,)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.rereskillable]]
     modId="minecraft"
     mandatory=true
-    versionRange="[1.18,1.19)"
+    versionRange="[1.19.2,1.20)"
     ordering="NONE"
     side="BOTH"
 
 [[dependencies.rereskillable]]
     modId="curios"
     mandatory=false
-    versionRange="[1.18-5.0.2.1,)"
+    versionRange="[1.19.2-5.1.6.1,)"
     ordering="AFTER"
     side="BOTH"

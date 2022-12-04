@@ -2,7 +2,7 @@ package majik.rereskillable.common.network;
 
 import majik.rereskillable.Rereskillable;
 import majik.rereskillable.client.Overlay;
-import majik.rereskillable.common.skills.RequirementType;
+import majik.rereskillable.common.commands.skills.RequirementType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;

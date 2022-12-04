@@ -3,7 +3,7 @@ package majik.rereskillable.common.network;
 import majik.rereskillable.Configuration;
 import majik.rereskillable.Rereskillable;
 import majik.rereskillable.common.capabilities.SkillModel;
-import majik.rereskillable.common.skills.Skill;
+import majik.rereskillable.common.commands.skills.Skill;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;

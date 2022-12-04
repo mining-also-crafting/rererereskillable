@@ -1,9 +1,10 @@
 package majik.rereskillable;
 
 import majik.rereskillable.client.Keybind;
+import majik.rereskillable.client.Keybind;
 import majik.rereskillable.client.Overlay;
 import majik.rereskillable.client.Tooltip;
-import majik.rereskillable.client.screen.InventoryTabs;
+import majik.rereskillable.client.screen.buttons.KeyBinding;
 import majik.rereskillable.common.CuriosCompat;
 import majik.rereskillable.common.EventHandler;
 import majik.rereskillable.common.capabilities.SkillModel;
@@ -30,6 +31,8 @@ import java.util.Optional;
 @Mod("rereskillable")
 public class Rereskillable
 {
+    private static String Rereskillable;
+    public static final String MOD_ID = "Rereskillable";
     public static SimpleChannel NETWORK;
     
     public Rereskillable()
@@ -71,9 +74,9 @@ public class Rereskillable
     
     private void clientSetup(final FMLClientSetupEvent event)
     {
-        MinecraftForge.EVENT_BUS.register(new InventoryTabs());
         MinecraftForge.EVENT_BUS.register(new Tooltip());
         MinecraftForge.EVENT_BUS.register(new Keybind());
         MinecraftForge.EVENT_BUS.register(new Overlay());
+
     }
 }

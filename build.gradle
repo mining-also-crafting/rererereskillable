@@ -12,6 +12,7 @@ buildscript {
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
+apply from: 'https://raw.githubusercontent.com/SizableShrimp/ForgeUpdatesRemapper/main/remapper.gradle'
 
 group = 'majik.rereskillable'
 archivesBaseName = name + '-' + project.mcVersion
@@ -20,7 +21,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
 minecraft {
-    mappings channel: 'official', version: '1.18.2'
+    mappings channel: 'official', version: '1.19.2'
 
     runs {
         client {
@@ -75,8 +76,8 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.18.2-40.1.48'
-    compileOnly fg.deobf('curse.maven:curios-309927:3841948')
+    minecraft 'net.minecraftforge:forge:1.19.2-43.3.8'
+    compileOnly fg.deobf('curse.maven:curios-309927:5066842')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
@@ -117,3 +118,4 @@ mixin {
 }
 
 apply from: "https://moddingtutorials.org/applesilicon.gradle"
+apply from: "https://moddingtutorials.org/publish.gradle"

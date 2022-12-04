@@ -7,7 +7,7 @@ import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import majik.rereskillable.Configuration;
 import majik.rereskillable.common.capabilities.SkillModel;
 import majik.rereskillable.common.network.SyncToClient;
-import majik.rereskillable.common.skills.Skill;
+import majik.rereskillable.common.commands.skills.Skill;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.EntityArgument;
