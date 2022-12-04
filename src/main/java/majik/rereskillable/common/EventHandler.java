@@ -155,7 +155,6 @@ public class EventHandler
             if (Configuration.getDeathReset()){
                 SkillModel.get((Player) event.getEntity()).skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
             }
-            lastDiedPlayerSkills = SkillModel.get((Player) event.getEntity());
         }
     }
     
@@ -173,12 +172,13 @@ public class EventHandler
         }
     }
 
-    private SkillModel lastDiedPlayerSkills = null;
     
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event)
     {
-        SkillModel.get(event.getPlayer()).skillLevels = lastDiedPlayerSkills.skillLevels; // SkillModel.get(event.getOriginal()).skillLevels;
+        event.getOriginal().reviveCaps();
+        SkillModel.get(event.getPlayer()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
+        event.getOriginal().invalidateCaps();
     }
     
     @SubscribeEvent

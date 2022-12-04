@@ -1,0 +1,16 @@
+{
+  "loader": "forge",
+  "mc_versions": ["1.18.2", "1.18.1", "1.18"],
+  "releaseType": "release",
+  "curseforge": {
+    "id": "655660"
+  },
+  "modrinth": {
+    "id": "kZqdkzKM"
+  },
+  "github": {
+    "owner": "LukeGrahamLandry",
+    "repo": "rereskillable",
+    "branch": "1.18-forge"
+  }
+}
