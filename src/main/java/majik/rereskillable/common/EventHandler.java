@@ -12,6 +12,7 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -153,6 +154,7 @@ public class EventHandler
             if (Configuration.getDeathReset()){
                 SkillModel.get((Player) event.getEntity()).skillLevels = new int[]{1, 1, 1, 1, 1, 1, 1, 1};
             }
+            lastDiedPlayerSkills = SkillModel.get((Player) event.getEntity());
         }
     }
     
@@ -170,13 +172,12 @@ public class EventHandler
         }
     }
 
+    private SkillModel lastDiedPlayerSkills = null;
     
     @SubscribeEvent
     public void onPlayerClone(PlayerEvent.Clone event)
     {
-        event.getOriginal().reviveCaps();
-        SkillModel.get(event.getEntity()).skillLevels = SkillModel.get(event.getOriginal()).skillLevels;
-        event.getOriginal().invalidateCaps();
+        SkillModel.get(event.getEntity()).skillLevels = lastDiedPlayerSkills.skillLevels; // SkillModel.get(event.getOriginal()).skillLevels;
     }
     
     @SubscribeEvent
