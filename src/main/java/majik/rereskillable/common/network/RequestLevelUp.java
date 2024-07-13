@@ -34,6 +34,7 @@ public class RequestLevelUp
         context.get().enqueueWork(() ->
         {
             ServerPlayer player = context.get().getSender();
+            assert player != null;
             SkillModel skillModel = SkillModel.get(player);
             Skill skill = Skill.values()[this.skill];
             

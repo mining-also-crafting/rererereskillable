@@ -11,29 +11,31 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
+import net.minecraft.core.RegistryAccess;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Mixin(CraftingMenu.class)
 public class CraftingContainerMixin {
-    @Inject(at=@At("HEAD"), method = "slotChangedCraftingGrid", cancellable = true)
-    private static void onUpdateCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_, CallbackInfo ci){
+    @Inject(at = @At("HEAD"), method = "slotChangedCraftingGrid", cancellable = true)
+    private static void onUpdateCraftingGrid(AbstractContainerMenu p_150547_, Level p_150548_, Player p_150549_, CraftingContainer p_150550_, ResultContainer p_150551_, CallbackInfo ci) {
         if (!p_150548_.isClientSide) {
-            ServerPlayer serverplayer = (ServerPlayer)p_150549_;
+            ServerPlayer serverplayer = (ServerPlayer) p_150549_;
             ItemStack craftResult = ItemStack.EMPTY;
-            Optional<CraftingRecipe> optional = p_150548_.getServer().getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
+            Optional<CraftingRecipe> optional = Objects.requireNonNull(p_150548_.getServer()).getRecipeManager().getRecipeFor(RecipeType.CRAFTING, p_150550_, p_150548_);
             if (optional.isPresent()) {
                 CraftingRecipe craftingrecipe = optional.get();
                 if (p_150551_.setRecipeUsed(p_150548_, serverplayer, craftingrecipe)) {
-                    craftResult = craftingrecipe.assemble(p_150550_);
+                    craftResult = craftingrecipe.assemble(p_150550_, p_150548_.registryAccess());
                 }
             }
 
-            if (!craftResult.isEmpty() && !SkillModel.get(serverplayer).canCraftItem(serverplayer, craftResult)){
+            if (!craftResult.isEmpty() && !SkillModel.get(serverplayer).canCraftItem(serverplayer, craftResult)) {
                 ci.cancel();
                 p_150551_.setItem(0, ItemStack.EMPTY);
             }

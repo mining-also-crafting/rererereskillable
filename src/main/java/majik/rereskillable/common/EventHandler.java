@@ -12,7 +12,6 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
@@ -35,7 +34,7 @@ public class EventHandler
         Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
         SkillModel model = SkillModel.get(player);
         
-        if (!player.isCreative() && (!model.canUseItem(player, item) || !model.canUseBlock(player, block)))
+        if (!player.isCreative() && (model.canUseItem(player, item) || model.canUseBlock(player, block)))
         {
             event.setCanceled(true);
         }
@@ -51,7 +50,7 @@ public class EventHandler
         Block block = event.getLevel().getBlockState(event.getPos()).getBlock();
         SkillModel model = SkillModel.get(player);
         
-        if (!player.isCreative() && (!model.canUseItem(player, item) || !model.canUseBlock(player, block)))
+        if (!player.isCreative() && (model.canUseItem(player, item) || model.canUseBlock(player, block)))
         {
             event.setCanceled(true);
         }
@@ -65,7 +64,7 @@ public class EventHandler
         Player player = event.getEntity();
         ItemStack item = event.getItemStack();
         
-        if (!player.isCreative() && !SkillModel.get(player).canUseItem(player, item))
+        if (!player.isCreative() && SkillModel.get(player).canUseItem(player, item))
         {
             event.setCanceled(true);
         }
@@ -82,7 +81,7 @@ public class EventHandler
         
         if (!player.isCreative())
         {
-            if (!SkillModel.get(player).canUseEntity(player, entity) || !SkillModel.get(player).canUseItem(player, item))
+            if (!SkillModel.get(player).canUseEntity(player, entity) || SkillModel.get(player).canUseItem(player, item))
             {
                 event.setCanceled(true);
             }
@@ -100,7 +99,7 @@ public class EventHandler
         {
             ItemStack item = player.getMainHandItem();
     
-            if (!player.isCreative() && !SkillModel.get(player).canUseItem(player, item))
+            if (!player.isCreative() && SkillModel.get(player).canUseItem(player, item))
             {
                 event.setCanceled(true);
             }
@@ -117,15 +116,14 @@ public class EventHandler
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onChangeEquipment(LivingEquipmentChangeEvent event)
     {
-        if (event.getEntity() instanceof Player)
+        if (event.getEntity() instanceof Player player)
         {
-            Player player = (Player) event.getEntity();
-            
+
             if (!player.isCreative() && event.getSlot().getType() == EquipmentSlot.Type.ARMOR)
             {
                 ItemStack item = event.getTo();
                 
-                if (!SkillModel.get(player).canUseItem(player, item))
+                if (SkillModel.get(player).canUseItem(player, item))
                 {
                     player.drop(item.copy(), false);
                     item.setCount(0);
@@ -195,7 +193,7 @@ public class EventHandler
     @SubscribeEvent
     public void onChangeDimension(PlayerEvent.PlayerChangedDimensionEvent e)
     {
-        if (e.getEntity().level.isClientSide()) return;
+        if (e.getEntity().level().isClientSide()) return;
         SyncToClient.send(e.getEntity());
     }
 }

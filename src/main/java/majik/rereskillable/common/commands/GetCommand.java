@@ -29,8 +29,8 @@ public class GetCommand
         ServerPlayer player = EntityArgument.getPlayer(context, "player");
         Skill skill = context.getArgument("skill", Skill.class);
         int level = SkillModel.get(player).getSkillLevel(skill);
-        
-        context.getSource().sendSuccess(Component.translatable(skill.displayName).append(" " + level), true);
+
+        context.getSource().sendSuccess(() -> Component.translatable(skill.displayName).append(" " + level), true);
         
         return level;
     }

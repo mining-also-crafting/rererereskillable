@@ -9,19 +9,23 @@ buildscript {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
+
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply from: 'https://raw.githubusercontent.com/SizableShrimp/ForgeUpdatesRemapper/main/remapper.gradle'
 
 group = 'majik.rereskillable'
-archivesBaseName = name + '-' + project.mcVersion
+version = '1.0.0' // Define your mod version here
+archivesBaseName = 'rereskillable'
+mcVersion = '1.20.1' // Define the Minecraft version here
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 println('Java: ' + System.getProperty('java.version') + ' JVM: ' + System.getProperty('java.vm.version') + '(' + System.getProperty('java.vendor') + ') Arch: ' + System.getProperty('os.arch'))
+
 minecraft {
-    mappings channel: 'official', version: '1.19.2'
+    mappings channel: 'official', version: mcVersion
 
     runs {
         client {
@@ -76,22 +80,22 @@ repositories {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.19.2-43.3.8'
-    compileOnly fg.deobf('curse.maven:curios-309927:5066842')
+    minecraft "net.minecraftforge:forge:${mcVersion}-47.2.0"
+    compileOnly fg.deobf('curse.maven:curios-309927:5175956')
     annotationProcessor 'org.spongepowered:mixin:0.8.4:processor'
 }
 
 jar {
     manifest {
         attributes([
-            "Specification-Title": project.name,
-            "Specification-Vendor": project.author,
-            "Specification-Version": "1",
-            "Implementation-Title": project.name,
-            "Implementation-Version": project.version,
-            "Implementation-Vendor" : project.author,
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-            "MixinConfigs": "rereskillable.mixins.json"
+                "Specification-Title": project.name,
+                "Specification-Vendor": 'YourName', // Replace with your name or organization
+                "Specification-Version": "1",
+                "Implementation-Title": project.name,
+                "Implementation-Version": project.version,
+                "Implementation-Vendor": 'YourName', // Replace with your name or organization
+                "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+                "MixinConfigs": "rereskillable.mixins.json"
         ])
     }
 }

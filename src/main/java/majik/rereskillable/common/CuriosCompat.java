@@ -14,15 +14,14 @@ public class CuriosCompat
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public void onChangeCurio(CurioChangeEvent event)
     {
-        if (event.getEntity() instanceof Player)
+        if (event.getEntity() instanceof Player player)
         {
-            Player player = (Player) event.getEntity();
-            
+
             if (!player.isCreative())
             {
                 ItemStack item = event.getTo();
                 
-                if (!SkillModel.get(player).canUseItem(player, item))
+                if (SkillModel.get(player).canUseItem(player, item))
                 {
                     player.drop(item.copy(), false);
                     item.setCount(0);
