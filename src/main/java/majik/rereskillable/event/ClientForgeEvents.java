@@ -1,21 +1,16 @@
 package majik.rereskillable.event;
 
+import majik.rereskillable.Rereskillable;
 import majik.rereskillable.client.KeyBindings;
 import majik.rereskillable.client.screen.SkillScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.InputEvent;
-import net.minecraftforge.client.event.RegisterKeyMappingsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = "rereskillable", value = Dist.CLIENT)
-public class ClientEvents {
-
-    @SubscribeEvent
-    public static void onRegisterKeyMappings(RegisterKeyMappingsEvent event) {
-        event.register(KeyBindings.SKILLS_KEY);
-    }
+@Mod.EventBusSubscriber(modid = Rereskillable.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.FORGE)
+public class ClientForgeEvents {
 
     @SubscribeEvent
     public static void onKeyInput(InputEvent.Key event) {

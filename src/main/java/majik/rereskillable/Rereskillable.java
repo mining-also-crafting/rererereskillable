@@ -1,6 +1,7 @@
 package majik.rereskillable;
 
 import majik.rereskillable.client.Overlay;
+import majik.rereskillable.client.Tooltip;
 import majik.rereskillable.common.CuriosCompat;
 import majik.rereskillable.common.EventHandler;
 import majik.rereskillable.common.capabilities.SkillModel;
@@ -37,36 +38,39 @@ public class Rereskillable {
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Configuration.getConfig());
 
-        // Registering event handlers
-        MinecraftForge.EVENT_BUS.register(new EventHandler());
-        MinecraftForge.EVENT_BUS.register(new Commands());
-        MinecraftForge.EVENT_BUS.register(ClientEvents.ClientForgeEvents.class);
-
-        if (ModList.get().isLoaded("curios")) {
-            MinecraftForge.EVENT_BUS.register(new CuriosCompat());
-        }
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         Configuration.load();
 
         NETWORK = NetworkRegistry.newSimpleChannel(
-                new ResourceLocation("rereskillable", "main_channel"),
+                new ResourceLocation(MOD_ID, "main_channel"),
                 () -> "1.0",
                 s -> true,
                 s -> true
         );
-
         NETWORK.registerMessage(1, SyncToClient.class, SyncToClient::encode, SyncToClient::new, SyncToClient::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         NETWORK.registerMessage(2, RequestLevelUp.class, RequestLevelUp::encode, RequestLevelUp::new, RequestLevelUp::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         NETWORK.registerMessage(3, NotifyWarning.class, NotifyWarning::encode, NotifyWarning::new, NotifyWarning::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new Commands());
+
+        if (ModList.get().isLoaded("curios")) {
+            MinecraftForge.EVENT_BUS.register(new CuriosCompat());
+        }
     }
 
-    private void initCaps(RegisterCapabilitiesEvent event) {
+    public void initCaps(RegisterCapabilitiesEvent event) {
         event.register(SkillModel.class);
     }
 
     private void clientSetup(final FMLClientSetupEvent event) {
+        MinecraftForge.EVENT_BUS.register(new Tooltip());
         MinecraftForge.EVENT_BUS.register(new Overlay());
+
+        // Register client events for key bindings and key input handling
+        MinecraftForge.EVENT_BUS.register(ClientEvents.class);
     }
 }
