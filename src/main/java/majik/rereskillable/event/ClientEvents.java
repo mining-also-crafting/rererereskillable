@@ -23,11 +23,6 @@ public class ClientEvents {
     }
 
     @SubscribeEvent
-    public static void onKeyRegister(RegisterKeyMappingsEvent event) {
-        event.register(KeyBinding.SKILLS_KEY);
-    }
-
-    @SubscribeEvent
     public static void registerOverlay(RegisterGuiOverlaysEvent event) {
         event.registerAboveAll("skill_page", new Overlay());
     }

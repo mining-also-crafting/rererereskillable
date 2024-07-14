@@ -1,6 +1,7 @@
 package majik.rereskillable.client;
 
 import majik.rereskillable.Rereskillable;
+import majik.rereskillable.client.screen.buttons.KeyBinding;
 import net.minecraft.client.KeyMapping;
 import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraftforge.api.distmarker.Dist;
@@ -14,10 +15,10 @@ import org.lwjgl.glfw.GLFW;
 public class Keybind {
     public static final String RESKILLABLE_CATEGORY = "key.reskillable.category";
     public static final KeyMapping openKey = new KeyMapping("key.skills", KeyConflictContext.IN_GAME,
-            InputConstants.Type.KEYSYM, GLFW.GLFW_KEY_G, RESKILLABLE_CATEGORY);
+            InputConstants.getKey(InputConstants.KEY_G, -1), RESKILLABLE_CATEGORY);
 
     @SubscribeEvent
     public static void keybind(RegisterKeyMappingsEvent event) {
-        event.register(openKey);
+        event.register(KeyBinding.SKILLS_KEY);
     }
 }
