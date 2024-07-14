@@ -20,7 +20,7 @@ public class TabButton extends AbstractWidget {
         this.selected = selected;
     }
 
-    // Render
+    // Render the widget
     @Override
     public void renderWidget(@NotNull GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTicks) {
         Minecraft minecraft = Minecraft.getInstance();
@@ -29,19 +29,22 @@ public class TabButton extends AbstractWidget {
         if (active) {
             RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
 
+            // Draw the tab background
             guiGraphics.blit(SkillScreen.RESOURCES, getX(), getY(), selected ? 31 : 0, 166, width, height);
+            // Draw the icon
             guiGraphics.blit(SkillScreen.RESOURCES, getX() + (selected ? 8 : 10), getY() + 6, 240, 128 + type.iconIndex * 16, 16, 16);
         }
     }
 
-    // Press
+    // Handle button press
     public void onPress() {
         Minecraft minecraft = Minecraft.getInstance();
 
         switch (type) {
             case INVENTORY:
-                assert minecraft.player != null;
-                minecraft.setScreen(new InventoryScreen(minecraft.player));
+                if (minecraft.player != null) {
+                    minecraft.setScreen(new InventoryScreen(minecraft.player));
+                }
                 break;
 
             case SKILLS:
@@ -50,10 +53,12 @@ public class TabButton extends AbstractWidget {
         }
     }
 
+    @Override
     protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
         defaultButtonNarrationText(output);
     }
 
+    // Enum for Tab Types
     public enum TabType {
         INVENTORY(0),
         SKILLS(1);

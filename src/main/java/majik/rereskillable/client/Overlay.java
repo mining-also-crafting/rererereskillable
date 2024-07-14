@@ -5,7 +5,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import majik.rereskillable.Configuration;
 import majik.rereskillable.client.screen.SkillScreen;
 import majik.rereskillable.common.capabilities.SkillCapability;
-import majik.rereskillable.common.capabilities.SkillModel;
 import majik.rereskillable.common.commands.skills.Requirement;
 import majik.rereskillable.common.commands.skills.RequirementType;
 import net.minecraft.client.Minecraft;
@@ -16,7 +15,6 @@ import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Arrays;
 import java.util.List;
@@ -43,7 +41,7 @@ public class Overlay implements IGuiOverlay {
     public void render(ForgeGui gui, GuiGraphics guiGraphics, float partialTick, int screenWidth, int screenHeight) {
         Minecraft minecraft = Minecraft.getInstance();
 
-        if (minecraft.player != null && minecraft.player.getCapability(SkillCapability.INSTANCE).isPresent()) {
+        if (showTicks > 0 && minecraft.player != null && minecraft.player.getCapability(SkillCapability.INSTANCE).isPresent()) {
             PoseStack stack = guiGraphics.pose();
 
             RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
@@ -70,7 +68,7 @@ public class Overlay implements IGuiOverlay {
                 guiGraphics.blit(SkillScreen.RESOURCES, x, y, u, v, 16, 16);
 
                 String level = Integer.toString(requirement.level);
-                boolean met = SkillModel.get().getSkillLevel(requirement.skill) >= requirement.level;
+                boolean met = ClientUtils.getClientSkillModel().getSkillLevel(requirement.skill) >= requirement.level;
                 guiGraphics.drawString(minecraft.font, level, x + 17 - minecraft.font.width(level), y + 9, met ? 0x55FF55 : 0xFF5555, false);
             }
         }

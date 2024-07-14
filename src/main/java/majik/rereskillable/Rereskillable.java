@@ -1,5 +1,6 @@
 package majik.rereskillable;
 
+import majik.rereskillable.client.Keybind;
 import majik.rereskillable.client.Overlay;
 import majik.rereskillable.client.Tooltip;
 import majik.rereskillable.common.CuriosCompat;
@@ -69,6 +70,7 @@ public class Rereskillable {
     private void clientSetup(final FMLClientSetupEvent event) {
         MinecraftForge.EVENT_BUS.register(new Tooltip());
         MinecraftForge.EVENT_BUS.register(new Overlay());
+        MinecraftForge.EVENT_BUS.register(new Keybind());
 
         // Register client events for key bindings and key input handling
         MinecraftForge.EVENT_BUS.register(ClientEvents.class);

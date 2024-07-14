@@ -20,17 +20,20 @@ public class Tooltip {
         if (Minecraft.getInstance().player != null) {
             ItemStack stack = event.getItemStack();
             ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
-            assert itemRegistryName != null;
-            Requirement[] requirements = Configuration.getRequirements(itemRegistryName);
+            if (itemRegistryName != null) {
+                Requirement[] requirements = Configuration.getRequirements(itemRegistryName);
 
-            if (requirements != null) {
-                List<Component> tooltips = event.getToolTip();
-                tooltips.add(Component.literal(""));
-                tooltips.add(Component.translatable("tooltip.requirements").append(":").withStyle(ChatFormatting.GRAY));
+                if (requirements != null) {
+                    List<Component> tooltips = event.getToolTip();
+                    tooltips.add(Component.literal(""));
+                    tooltips.add(Component.translatable("tooltip.requirements").append(":").withStyle(ChatFormatting.GRAY));
 
-                for (Requirement requirement : requirements) {
-                    ChatFormatting colour = SkillModel.get().getSkillLevel(requirement.skill) >= requirement.level ? ChatFormatting.GREEN : ChatFormatting.RED;
-                    tooltips.add(Component.translatable(requirement.skill.displayName).append(" " + requirement.level).withStyle(colour));
+                    SkillModel skillModel = SkillModel.get(Minecraft.getInstance().player);
+
+                    for (Requirement requirement : requirements) {
+                        ChatFormatting colour = skillModel.getSkillLevel(requirement.skill) >= requirement.level ? ChatFormatting.GREEN : ChatFormatting.RED;
+                        tooltips.add(Component.translatable(requirement.skill.displayName).append(" " + requirement.level).withStyle(colour));
+                    }
                 }
             }
         }

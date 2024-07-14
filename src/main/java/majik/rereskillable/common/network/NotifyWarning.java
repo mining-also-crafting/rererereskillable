@@ -3,6 +3,7 @@ package majik.rereskillable.common.network;
 import majik.rereskillable.Rereskillable;
 import majik.rereskillable.client.Overlay;
 import majik.rereskillable.common.commands.skills.RequirementType;
+import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -12,39 +13,36 @@ import net.minecraftforge.network.PacketDistributor;
 
 import java.util.function.Supplier;
 
-public class NotifyWarning
-{
+public class NotifyWarning {
     private final ResourceLocation resource;
     private final RequirementType type;
 
-    public NotifyWarning(ResourceLocation resource, RequirementType type)
-    {
+    public NotifyWarning(ResourceLocation resource, RequirementType type) {
         this.resource = resource;
         this.type = type;
     }
-    
-    public NotifyWarning(FriendlyByteBuf buffer)
-    {
+
+    public NotifyWarning(FriendlyByteBuf buffer) {
         resource = buffer.readResourceLocation();
         type = buffer.readEnum(RequirementType.class);
     }
-    
-    public void encode(FriendlyByteBuf buffer)
-    {
+
+    public void encode(FriendlyByteBuf buffer) {
         buffer.writeResourceLocation(resource);
         buffer.writeEnum(this.type);
     }
-    
-    public void handle(Supplier<NetworkEvent.Context> context)
-    {
-        context.get().enqueueWork(() -> Overlay.showWarning(resource, type));
+
+    public void handle(Supplier<NetworkEvent.Context> context) {
+        context.get().enqueueWork(() -> {
+            if (Minecraft.getInstance().player != null) {
+                Overlay.showWarning(resource, type);
+            }
+        });
         context.get().setPacketHandled(true);
     }
-    
+
     // Send Packet
-    
-    public static void send(Player player, ResourceLocation resource, RequirementType type)
-    {
+    public static void send(Player player, ResourceLocation resource, RequirementType type) {
         Rereskillable.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new NotifyWarning(resource, type));
     }
 }

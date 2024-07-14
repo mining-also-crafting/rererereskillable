@@ -8,25 +8,23 @@ import majik.rereskillable.common.commands.skills.Skill;
 import majik.rereskillable.Configuration;
 import majik.rereskillable.common.network.RequestLevelUp;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.components.AbstractWidget;
+import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.gui.Font;
 import net.minecraft.network.chat.Component;
 import com.mojang.blaze3d.vertex.PoseStack;
 import org.jetbrains.annotations.NotNull;
 
-public class SkillButton extends AbstractWidget {
+public class SkillButton extends Button {
     private final Skill skill;
-    private final int level;
-    private final int maxLevel;
 
-    public SkillButton(int x, int y, Skill skill, int level, int maxLevel) {
-        super(x, y, 79, 32, Component.literal(""));
+    public SkillButton(int x, int y, Skill skill) {
+        super(new Button.Builder(Component.literal(""), onPress -> RequestLevelUp.send(skill))
+                .pos(x, y)
+                .size(79, 32));
         this.skill = skill;
-        this.level = level;
-        this.maxLevel = maxLevel;
     }
 
     @Override
@@ -34,7 +32,9 @@ public class SkillButton extends AbstractWidget {
         Minecraft minecraft = Minecraft.getInstance();
         RenderSystem.setShaderTexture(0, SkillScreen.RESOURCES);
 
-        int level = SkillModel.get().getSkillLevel(skill);
+        assert minecraft.player != null;
+        SkillModel skillModel = SkillModel.get(minecraft.player);
+        int level = skillModel.getSkillLevel(skill);
         int maxLevel = Configuration.getMaxLevel();
 
         int u = ((int) Math.ceil((double) level * 4 / maxLevel) - 1) * 16 + 176;
@@ -55,19 +55,15 @@ public class SkillButton extends AbstractWidget {
         if (isMouseOver(mouseX, mouseY) && level < maxLevel) {
             int cost = Configuration.getStartCost() + (level - 1) * Configuration.getCostIncrease();
             assert minecraft.player != null;
-            int colour = minecraft.player.experienceLevel >= cost ? 0x7EFC20 : 0xFC5454;
+            int color = minecraft.player.experienceLevel >= cost ? 0x7EFC20 : 0xFC5454;
             String text = Integer.toString(cost);
 
-            guiGraphics.drawString(font, text, getX() + 73 - font.width(text), getY() + 18, colour);
+            guiGraphics.drawString(font, text, getX() + 73 - font.width(text), getY() + 18, color);
         }
     }
 
-    public void onPress() {
-        RequestLevelUp.send(skill);
-    }
-
     @Override
-    protected void updateWidgetNarration(@NotNull NarrationElementOutput output) {
+    public void updateWidgetNarration(@NotNull NarrationElementOutput output) {
         defaultButtonNarrationText(output);
     }
 }

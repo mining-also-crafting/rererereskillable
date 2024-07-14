@@ -2,8 +2,11 @@ package majik.rereskillable.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import majik.rereskillable.client.screen.buttons.SkillButton;
+import majik.rereskillable.common.capabilities.SkillModel;
 import majik.rereskillable.common.commands.skills.Skill;
+import majik.rereskillable.Configuration;
 import net.minecraft.ChatFormatting;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
@@ -26,21 +29,23 @@ public class SkillScreen extends Screen {
             int x = left + i % 2 * 83;
             int y = top + i / 2 * 36;
             Skill skill = Skill.values()[i];
-            int level = getLevel(skill);  // Replace this with actual method to get the player's skill level
-            int maxLevel = getMaxLevel(skill);  // Replace this with actual method to get the maximum skill level
 
-            addRenderableWidget(new SkillButton(x, y, skill, level, maxLevel));
+            addRenderableWidget(new SkillButton(x, y, skill));
         }
     }
 
     private int getLevel(Skill skill) {
-        // Replace this with actual method to get the player's skill level
-        return 0;
+        // Retrieve the skill level from the player's SkillModel
+        if (Minecraft.getInstance().player != null) {
+            SkillModel skillModel = SkillModel.get(Minecraft.getInstance().player);
+            return skillModel.getSkillLevel(skill);
+        }
+        return 0; // Return a default value if the player is null
     }
 
-    private int getMaxLevel(Skill skill) {
-        // Replace this with actual method to get the maximum skill level
-        return 100;
+    private int getMaxLevel() {
+        // Retrieve the maximum skill level from the configuration
+        return Configuration.getMaxLevel();
     }
 
     @Override

@@ -9,42 +9,41 @@ import net.minecraftforge.common.util.LazyOptional;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public class SkillProvider implements ICapabilitySerializable<CompoundTag>
-{
+public class SkillProvider implements ICapabilitySerializable<CompoundTag> {
     private final SkillModel skillModel;
     private final LazyOptional<SkillModel> optional;
 
-    public SkillProvider(SkillModel skillModel)
-    {
-        this.skillModel = skillModel;
-        optional = LazyOptional.of(() -> skillModel);
+    public SkillProvider() {
+        this.skillModel = new SkillModel();
+        this.optional = LazyOptional.of(() -> skillModel);
     }
-    
-    public void invalidate()
-    {
+
+    public SkillProvider(SkillModel skillModel) {
+        this.skillModel = skillModel;
+        this.optional = LazyOptional.of(() -> skillModel);
+    }
+
+    public void invalidate() {
         optional.invalidate();
     }
-    
+
     // Get Capability
-    
     @Nonnull
     @Override
-    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side)
-    {
-        if (capability == SkillCapability.INSTANCE) return optional.cast();
-        
+    public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> capability, @Nullable Direction side) {
+        if (capability == SkillCapability.INSTANCE) {
+            return optional.cast();
+        }
         return LazyOptional.empty();
     }
-    
+
     @Override
-    public CompoundTag serializeNBT()
-    {
+    public CompoundTag serializeNBT() {
         return skillModel.serializeNBT();
     }
-    
+
     @Override
-    public void deserializeNBT(CompoundTag nbt)
-    {
+    public void deserializeNBT(CompoundTag nbt) {
         skillModel.deserializeNBT(nbt);
     }
 }

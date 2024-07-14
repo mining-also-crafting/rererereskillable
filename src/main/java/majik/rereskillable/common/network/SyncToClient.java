@@ -14,30 +14,30 @@ import java.util.function.Supplier;
 public class SyncToClient
 {
     private final CompoundTag skillModel;
-    
+
     public SyncToClient(CompoundTag skillModel)
     {
         this.skillModel = skillModel;
     }
-    
+
     public SyncToClient(FriendlyByteBuf buffer)
     {
         skillModel = buffer.readNbt();
     }
-    
+
     public void encode(FriendlyByteBuf buffer)
     {
         buffer.writeNbt(skillModel);
     }
-    
+
     public void handle(Supplier<NetworkEvent.Context> context)
     {
         context.get().enqueueWork(() -> SkillModel.get().deserializeNBT(skillModel));
         context.get().setPacketHandled(true);
     }
-    
+
     // Send Packet
-    
+
     public static void send(Player player)
     {
         Rereskillable.NETWORK.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player), new SyncToClient(SkillModel.get(player).serializeNBT()));

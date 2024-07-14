@@ -14,6 +14,6 @@
   "tooltip.requirements": "Skill Requirements",
   "key.skills": "Open Skills",
   "key.reskillable.category": "Reskillable",
-  "key.rereskillable.open_skills": "ReSkillable",
-  "key.category.rereskillable": "Open Skills"
+  "key.rereskillable.open_skills": "Open Skills",
+  "key.categories.rereskillable": "Rereskillable"
 }
