@@ -4,6 +4,7 @@ import majik.rereskillable.common.network.NotifyWarning;
 import majik.rereskillable.common.commands.skills.Requirement;
 import majik.rereskillable.common.commands.skills.RequirementType;
 import majik.rereskillable.common.commands.skills.Skill;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.entity.Entity;
@@ -82,7 +83,7 @@ public class SkillModel implements INBTSerializable<CompoundTag> {
             for (Requirement requirement : requirements) {
                 if (getSkillLevel(requirement.skill) < requirement.level) {
                     if (player instanceof ServerPlayer) {
-                        NotifyWarning.send(player, resource, type);
+                        player.sendSystemMessage(Component.nullToEmpty("You are not skilled enough to use this item."));
                     }
                     return false;
                 }
