@@ -4,6 +4,8 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import majik.rereskillable.Configuration;
+import net.minecraft.network.chat.Component;
 
 /**
  * Class responsible for registering commands for the mod.
@@ -22,6 +24,13 @@ public class Commands {
                         .requires(source -> source.hasPermission(2))
                         .then(SetCommand.register())
                         .then(GetCommand.register())
+                        .then(LiteralArgumentBuilder.<CommandSourceStack>literal("reload")
+                                .executes(context -> {
+                                    Configuration.load();
+                                    context.getSource().sendSuccess(() -> Component.literal("Skill configuration reloaded"), true);
+                                    return 1;
+                                })
+                        )
         );
     }
 }

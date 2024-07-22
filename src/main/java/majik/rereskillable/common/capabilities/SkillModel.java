@@ -83,7 +83,11 @@ public class SkillModel implements INBTSerializable<CompoundTag> {
             for (Requirement requirement : requirements) {
                 if (getSkillLevel(requirement.skill) < requirement.level) {
                     if (player instanceof ServerPlayer) {
-                        player.sendSystemMessage(Component.nullToEmpty("You are not skilled enough to use this item."));
+                        String message = "You are not skilled enough to use this item.";
+                        if (type == RequirementType.ATTACK) {
+                            message = "You are not strong enough to attack this creature.";
+                        }
+                        player.sendSystemMessage(Component.nullToEmpty(message));
                     }
                     return false;
                 }

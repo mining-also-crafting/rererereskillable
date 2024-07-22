@@ -9,6 +9,7 @@ import majik.rereskillable.common.capabilities.SkillModel;
 import majik.rereskillable.common.commands.Commands;
 import majik.rereskillable.common.network.NotifyWarning;
 import majik.rereskillable.common.network.RequestLevelUp;
+import majik.rereskillable.common.network.SyncSkillConfigPacket;
 import majik.rereskillable.common.network.SyncToClient;
 import majik.rereskillable.event.ClientEvents;
 import net.minecraft.resources.ResourceLocation;
@@ -54,6 +55,7 @@ public class Rereskillable {
         NETWORK.registerMessage(1, SyncToClient.class, SyncToClient::encode, SyncToClient::new, SyncToClient::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
         NETWORK.registerMessage(2, RequestLevelUp.class, RequestLevelUp::encode, RequestLevelUp::new, RequestLevelUp::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
         NETWORK.registerMessage(3, NotifyWarning.class, NotifyWarning::encode, NotifyWarning::new, NotifyWarning::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+        NETWORK.registerMessage(4, SyncSkillConfigPacket.class, SyncSkillConfigPacket::toBytes, SyncSkillConfigPacket::new, SyncSkillConfigPacket::handle);
 
         MinecraftForge.EVENT_BUS.register(new EventHandler());
         MinecraftForge.EVENT_BUS.register(new Commands());
