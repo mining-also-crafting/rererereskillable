@@ -17,8 +17,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.server.command.EnumArgument;
 
+import java.util.logging.Logger;
+
 @Mod.EventBusSubscriber
 public class GetCommand {
+    private static final Logger LOGGER = Logger.getLogger(GetCommand.class.getName());
 
     static ArgumentBuilder<CommandSourceStack, ?> register() {
         return Commands.literal("get")
@@ -50,6 +53,7 @@ public class GetCommand {
                                     Configuration.load();
                                     context.getSource().sendSuccess(() -> Component.literal("Skill configuration reloaded"), true);
                                     SyncSkillConfigPacket.sendToAllClients();
+                                    LOGGER.info("Executed /skills reload command and sent SyncSkillConfigPacket to clients.");
                                     return 1;
                                 }))
         );

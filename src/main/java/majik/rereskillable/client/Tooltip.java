@@ -12,9 +12,13 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class Tooltip {
+    private static final Logger LOGGER = Logger.getLogger(Tooltip.class.getName());
+
     @SubscribeEvent
     public void onTooltipDisplay(ItemTooltipEvent event) {
         if (Minecraft.getInstance().player != null) {
@@ -22,6 +26,7 @@ public class Tooltip {
             ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
             if (itemRegistryName != null) {
                 Requirement[] requirements = Configuration.getRequirements(itemRegistryName);
+                LOGGER.info("Retrieved requirements for " + itemRegistryName + ": " + Arrays.toString(requirements));
 
                 if (requirements != null) {
                     List<Component> tooltips = event.getToolTip();

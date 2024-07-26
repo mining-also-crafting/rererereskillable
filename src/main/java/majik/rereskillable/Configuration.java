@@ -169,7 +169,6 @@ public class Configuration {
                 System.err.println("Failed to create default file: " + filename);
             }
         }
-
         try (FileReader reader = new FileReader(file)) {
             JsonObject jsonObject = JsonParser.parseReader(reader).getAsJsonObject();
             Type mapType = new TypeToken<Map<String, Map<String, List<String>>>>() {}.getType();
@@ -180,6 +179,7 @@ public class Configuration {
             e.printStackTrace();
             return new HashMap<>();
         }
+
     }
 
     private static boolean createDefaultJsonFile(File file, String content) {
