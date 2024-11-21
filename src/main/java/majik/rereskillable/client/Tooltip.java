@@ -26,7 +26,7 @@ public class Tooltip {
             ResourceLocation itemRegistryName = ForgeRegistries.ITEMS.getKey(stack.getItem());
             if (itemRegistryName != null) {
                 Requirement[] requirements = Configuration.getRequirements(itemRegistryName);
-                LOGGER.info("Retrieved requirements for " + itemRegistryName + ": " + Arrays.toString(requirements));
+//                LOGGER.info("Retrieved requirements for " + itemRegistryName + ": " + Arrays.toString(requirements));
 
                 if (requirements != null) {
                     List<Component> tooltips = event.getToolTip();
